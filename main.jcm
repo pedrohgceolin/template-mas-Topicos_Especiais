@@ -11,18 +11,26 @@
 
 mas main {
 
-    agent bob: sample_agent.asl {
-      focus: w.c1 
+    //agent bob: sample_agent.asl {
+    //  focus: w.c1 
+    //}
+
+    agent drone1 : drone.asl {
+        beliefs: localizacao(10,8)
     }
-
-    agent ar_condicionado: ar_condicionado.asl
-    agent camera: camera.asl
-    agent cortina: cortina.asl
-    agent lampada: lampada.asl
-    agent fechadura: fechadura.asl
-
-
-    workspace w {
-      artifact c1: example.Counter(3) 
+    agent drone2 : drone.asl {
+        beliefs: localizacao(20,12)
     }
+    agent coordenador : coordenador.asl
+    
+    // agent ar_condicionado: ar_condicionado.asl
+    // agent camera: camera.asl
+    // agent cortina: cortina.asl
+    // agent lampada: lampada.asl
+    // agent fechadura: fechadura.asl
+
+
+    // workspace w {
+    //   artifact c1: example.Counter(3) 
+    // }
 }

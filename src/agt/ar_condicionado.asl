@@ -3,6 +3,7 @@
 /* Initial beliefs and rules */
 
 temperatura_de_preferencia(jonas,25).
+temperatura_atual(30).
 
 /* Initial goals */
 
