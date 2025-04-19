@@ -1,7 +1,7 @@
 !buscar_drones.
-!distribuir(drone1 , 001, 10, 15, 25, 30).
+!distribuir(drone1, 001, 10, 15, 25, 30).
 
-+!distribuir(Drone ,Pacote, XOrigem, YOrigem, XDestino, YDestino)
++!distribuir(Drone, Pacote, XOrigem, YOrigem, XDestino, YDestino)
     <-  .wait(2000);
         .print("Enviando pacote ", Pacote, " para drone ", Drone);
         .send(Drone, achieve, entregar(Pacote, XOrigem, YOrigem, XDestino, YDestino));
