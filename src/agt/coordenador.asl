@@ -7,12 +7,6 @@
         .send(Drone, achieve, entregar(Pacote, XOrigem, YOrigem, XDestino, YDestino));
         .print("Drone ", Drone, " recebeu a missão.").
 
-// Se não tiver drone disponível
-//+!distribuir(Pacote, Origem, Destino) : not env.drone_disponivel(_) 
-//    <-  .print("Nenhum drone disponível agora. Tentando novamente em 3s...");
-//        .wait(3000);
-//        !distribuir(Pacote, Destino).
-
 +!buscar_drones
     <-  .broadcast(achieve, mandar_loc);
         .wait(5000);
