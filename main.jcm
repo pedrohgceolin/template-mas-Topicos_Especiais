@@ -4,13 +4,91 @@
 */
 
 mas main {
+  
+  agent drone1 : drone.asl {
+      beliefs: localizacao(10,8)
+  }
+  agent drone2 : drone.asl {
+     beliefs: localizacao(20,12)
+  }
 
-    agent drone1 : drone.asl {
-        beliefs: localizacao(10,8)
-    }
-    agent drone2 : drone.asl {
-        beliefs: localizacao(20,12)
-    }
-    agent coordenador : coordenador.asl
-    
+  agent coordenador : coordenador.asl
+
+
+    // agent pessoa1 : pessoa.asl {
+    //   beliefs: sou(brasileiro)
+    //   goals: falar
+    // }
+    // agent pessoa2 : pessoa.asl {
+    //   beliefs: sou(italiano)
+    // }
+    // agent pessoa3 : pessoa.asl {
+    //   beliefs: sou(english)
+    // }
+    // agent pessoa4 : pessoa.asl {
+    //   beliefs: sou(espanol)
+    // }
+    // agent pessoa5 : pessoa.asl {
+    //   beliefs: sou(deutsch)
+    // }
+
+    //agent bob: sample_agent.asl {
+    //  focus: w.c1 
+    //}
+
+    //agent caixa_de_som: caixa_de_som.asl
+
+    //agent ar_condicionado: ar_condicionado.asl
+    //agent camera: camera.asl
+    //agent cortina: cortina.asl
+    //agent lampada: lampada.asl
+    //agent fechadura: fechadura.asl
+
+
+    //workspace w {
+    //  artifact c1: example.Counter(3) 
+    //}
+
+
+
+// agent alison: leiloeiro.asl{
+//     goals: anunciar_tarefa(tarefa1,40000), anunciar_tarefa(tarefa2,40000), anunciar_tarefa(tarefa3,40000)
+//   }
+
+//   agent bider1: bider.asl{
+//     beliefs: bid_minimo(20000,tarefa1), 
+//              bid_minimo(20000,tarefa2),
+//              bid_minimo(20000,tarefa3),
+//              decremento(2000,tarefa1),
+//              decremento(2000,tarefa2),
+//              decremento(2000,tarefa3),
+//   }
+
+//   agent aviao: bider.asl{
+//     beliefs: bid_minimo(12000,tarefa1), 
+//              bid_minimo(10000,tarefa2),
+//              bid_minimo(10000,tarefa3),
+//              decremento(500,tarefa1),
+//              decremento(500,tarefa2),
+//              decremento(500,tarefa3),
+//   }
+
+//   agent ceolin: bider.asl{
+//     beliefs: bid_minimo(9000,tarefa1), 
+//              bid_minimo(11000,tarefa2),
+//              bid_minimo(11000,tarefa3),
+//              decremento(1000,tarefa1),
+//              decremento(1000,tarefa2),
+//              decremento(500,tarefa3),
+//   }
+
+//   agent ceolin_agressivo: bider.asl {
+//     beliefs:  bid_minimo(9500,tarefa1),  // Um pouco mais baixo para ser mais competitiv
+//               bid_minimo(9500,tarefa2),
+//               bid_minimo(11000,tarefa3),
+//               decremento(500,tarefa1),  // Decrementos menores para ser mais agressivo
+//               decremento(500,tarefa2),
+//               decremento(1000,tarefa3),
+// }
+
 }
