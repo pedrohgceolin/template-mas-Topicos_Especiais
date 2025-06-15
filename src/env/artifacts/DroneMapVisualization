@@ -1,0 +1,134 @@
+package artifacts;
+
+import cartago.*;
+import cartago.tools.GUIArtifact;
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+
+public class DroneMapVisualization extends GUIArtifact {
+    private MapFrame frame;
+    private Map<String, DroneInfo> drones = new HashMap<>();
+    private Map<String, DeliveryInfo> deliveries = new HashMap<>();
+    
+    public void setup() {
+        frame = new MapFrame();
+        linkWindowClosingEventToOp(frame, "closed");
+        frame.setVisible(true);
+    }
+    
+    @OPERATION
+    void updateDronePosition(String droneId, int x, int y) {
+        drones.put(droneId, new DroneInfo(x, y));
+        frame.repaint();
+    }
+    
+    @OPERATION
+    void addDelivery(String pkgId, int pickupX, int pickupY, int deliveryX, int deliveryY, String assignedDrone) {
+        deliveries.put(pkgId, new DeliveryInfo(pickupX, pickupY, deliveryX, deliveryY, assignedDrone));
+        frame.repaint();
+    }
+    
+    @OPERATION
+    void completeDelivery(String pkgId) {
+        deliveries.remove(pkgId);
+        frame.repaint();
+    }
+    
+    @INTERNAL_OPERATION
+    void closed(WindowEvent ev) {
+        signal("closed");
+    }
+    
+    class MapFrame extends JFrame {
+        private static final int GRID_SIZE = 50;
+        private static final int MARGIN = 30;
+        
+        public MapFrame() {
+            setTitle("Drone Delivery Map");
+            setSize(800, 600);
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        }
+        
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+            
+            // Desenhar grade
+            g.setColor(Color.LIGHT_GRAY);
+            for (int x = 0; x < getWidth(); x += GRID_SIZE) {
+                g.drawLine(x, 0, x, getHeight());
+            }
+            for (int y = 0; y < getHeight(); y += GRID_SIZE) {
+                g.drawLine(0, y, getWidth(), y);
+            }
+            
+            // Desenhar drones
+            for (Map.Entry<String, DroneInfo> entry : drones.entrySet()) {
+                DroneInfo drone = entry.getValue();
+                int screenX = MARGIN + drone.x * GRID_SIZE;
+                int screenY = MARGIN + drone.y * GRID_SIZE;
+                
+                g.setColor(Color.BLUE);
+                g.fillOval(screenX - 10, screenY - 10, 20, 20);
+                
+                g.setColor(Color.BLACK);
+                g.drawString(entry.getKey(), screenX - 10, screenY - 15);
+            }
+            
+            // Desenhar entregas
+            for (Map.Entry<String, DeliveryInfo> entry : deliveries.entrySet()) {
+                DeliveryInfo delivery = entry.getValue();
+                int pickupX = MARGIN + delivery.pickupX * GRID_SIZE;
+                int pickupY = MARGIN + delivery.pickupY * GRID_SIZE;
+                int deliveryX = MARGIN + delivery.deliveryX * GRID_SIZE;
+                int deliveryY = MARGIN + delivery.deliveryY * GRID_SIZE;
+                
+                // Ponto de coleta
+                g.setColor(Color.GREEN);
+                g.fillRect(pickupX - 5, pickupY - 5, 10, 10);
+                g.drawString("P:" + entry.getKey(), pickupX + 10, pickupY);
+                
+                // Ponto de entrega
+                g.setColor(Color.RED);
+                g.fillRect(deliveryX - 5, deliveryY - 5, 10, 10);
+                g.drawString("E:" + entry.getKey(), deliveryX + 10, deliveryY);
+                
+                // Linha conectando
+                g.setColor(Color.ORANGE);
+                g.drawLine(pickupX, pickupY, deliveryX, deliveryY);
+                
+                // Drone atribuído
+                if (delivery.assignedDrone != null) {
+                    g.setColor(Color.MAGENTA);
+                    g.drawString("Drone: " + delivery.assignedDrone, 
+                                (pickupX + deliveryX)/2, 
+                                (pickupY + deliveryY)/2);
+                }
+            }
+        }
+    }
+    
+    class DroneInfo {
+        int x, y;
+        DroneInfo(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    
+    class DeliveryInfo {
+        int pickupX, pickupY;
+        int deliveryX, deliveryY;
+        String assignedDrone;
+        
+        DeliveryInfo(int pickupX, int pickupY, int deliveryX, int deliveryY, String assignedDrone) {
+            this.pickupX = pickupX;
+            this.pickupY = pickupY;
+            this.deliveryX = deliveryX;
+            this.deliveryY = deliveryY;
+            this.assignedDrone = assignedDrone;
+        }
+    }
+}

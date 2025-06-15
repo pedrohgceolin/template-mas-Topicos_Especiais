@@ -8,11 +8,25 @@ mas main {
   agent drone1 : drone.asl {
       beliefs: localizacao(10,8)
   }
+
   agent drone2 : drone.asl {
      beliefs: localizacao(20,12)
   }
 
+  agent drone3 : drone.asl {
+     beliefs: localizacao(23,3)
+  }
+
   agent coordenador : coordenador.asl
+
+//   workspace w {
+//     //artifact Pedidos_de_entrega: artifacts.Pedidos_de_entrega()
+//     artifact DroneMap: artifacts.DroneMapVisualization()
+// }
+  
+//   workspace w {
+//       artifact 1c: example.Counter(3) 
+//     }
 
 
     // agent pessoa1 : pessoa.asl {
@@ -43,52 +57,5 @@ mas main {
     //agent cortina: cortina.asl
     //agent lampada: lampada.asl
     //agent fechadura: fechadura.asl
-
-
-    //workspace w {
-    //  artifact c1: example.Counter(3) 
-    //}
-
-
-
-// agent alison: leiloeiro.asl{
-//     goals: anunciar_tarefa(tarefa1,40000), anunciar_tarefa(tarefa2,40000), anunciar_tarefa(tarefa3,40000)
-//   }
-
-//   agent bider1: bider.asl{
-//     beliefs: bid_minimo(20000,tarefa1), 
-//              bid_minimo(20000,tarefa2),
-//              bid_minimo(20000,tarefa3),
-//              decremento(2000,tarefa1),
-//              decremento(2000,tarefa2),
-//              decremento(2000,tarefa3),
-//   }
-
-//   agent aviao: bider.asl{
-//     beliefs: bid_minimo(12000,tarefa1), 
-//              bid_minimo(10000,tarefa2),
-//              bid_minimo(10000,tarefa3),
-//              decremento(500,tarefa1),
-//              decremento(500,tarefa2),
-//              decremento(500,tarefa3),
-//   }
-
-//   agent ceolin: bider.asl{
-//     beliefs: bid_minimo(9000,tarefa1), 
-//              bid_minimo(11000,tarefa2),
-//              bid_minimo(11000,tarefa3),
-//              decremento(1000,tarefa1),
-//              decremento(1000,tarefa2),
-//              decremento(500,tarefa3),
-//   }
-
-//   agent ceolin_agressivo: bider.asl {
-//     beliefs:  bid_minimo(9500,tarefa1),  // Um pouco mais baixo para ser mais competitiv
-//               bid_minimo(9500,tarefa2),
-//               bid_minimo(11000,tarefa3),
-//               decremento(500,tarefa1),  // Decrementos menores para ser mais agressivo
-//               decremento(500,tarefa2),
-//               decremento(1000,tarefa3),
-// }
 
 }

@@ -10,14 +10,20 @@ pacote(n).
         !voar_para(XDestino, YDestino);
         !entregar_pacote(Pacote);
         .print("Pacote ", Pacote, " entregue");
+        .send(coordenador, tell, missao_concluida(Nome, Pacote));
         -+ocupado(n).
 
- +!voar_para(X, Y) : .my_name(Nome)
-    <-  .print(Nome, " voando para (", X,",", Y,")");
-        .wait(2000);
-        !atualizar_bateria(X, Y);
-        .print(Nome ," chegou!");
-        -+localizacao(X,Y).
+ +!voar_para(X, Y) : localizacao(X1, Y1) & .my_name(Nome)
+    <-  Distancia = math.sqrt( (X - X1)*(X - X1) + (Y - Y1)*(Y - Y1) );
+        
+        TempoDeEspera = math.round(Distancia * 100);
+
+        .print(Nome, " voando de (",X1,",",Y1,") para (", X,",", Y,"). Distância: ", Distancia, ". Tempo de voo: ", TempoDeEspera, " ms.");
+        .wait(TempoDeEspera); // Usa o tempo de espera dinâmico.
+        
+        !atualizar_bateria(X, Y); // Chama a atualização de bateria APÓS o voo.
+        .print(Nome ," chegou ao seu destino!");
+        -+localizacao(X,Y). // Atualiza a crença de localização.
 
 +!pegar_pacote(Pacote) : .my_name(Nome)
     <-  .wait(1000);
@@ -29,15 +35,19 @@ pacote(n).
         .print(Nome ," entregou pacote ", Pacote);
         -+pacote(n).
 
-+!mandar_loc : localizacao(X,Y) & ocupado(O) & bateria(B)
-    <-  .send(coordenador, tell, localizacao(X,Y));
-        .print("Mandando coordenadas: ", X, ", ", Y);
-        .send(coordenador, tell, ocupado(O));
-        .print("Ocupado: ", O);
-        .send(coordenador, tell, bateria(B));
-        .print("Bateria: ", B).
++!mandar_loc : localizacao(X,Y) & ocupado(O) & bateria(B) & .my_name(Nome)
+    <-  .send(coordenador, tell, localizacao(Nome,X,Y,O,B));
+        .print("Mandando coordenadas: ", X, ", ", Y, ", se Ocupado: ", O , " e Bateria: ", B).
 
-+!atualizar_bateria(X2, Y2) : localizacao(X1,Y1) & .my_name(Nome) & bateria(B)
-    <-  .print("Atualizando bateria do drone ", Nome);
-        .print("Bateria de ", B, " para ", B-10);
-        -+bateria(B-10).
++!atualizar_bateria(X2, Y2) : localizacao(X1, Y1) & .my_name(Nome) & bateria(B)
+    <-  // Calcula a distância real percorrida usando a fórmula da distância euclidiana.
+        Distancia = math.sqrt( (X2 - X1)*(X2 - X1) + (Y2 - Y1)*(Y2 - Y1) );
+
+        // Converte a distância para o gasto de bateria (arredondando para o inteiro mais próximo).
+        BateriaGasta = math.round(Distancia);
+        NovaBateria = B - BateriaGasta;
+
+        .print("Atualizando bateria do drone ", Nome);
+        .print("Distância voada: ", Distancia, ". Bateria gasta: ", BateriaGasta);
+        .print("Bateria anterior: ", B, ". Bateria atual: ", NovaBateria);
+        -+bateria(NovaBateria).
