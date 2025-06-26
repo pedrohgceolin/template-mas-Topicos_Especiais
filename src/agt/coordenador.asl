@@ -1,8 +1,8 @@
 last_order_id(0).
 
-!test_gui.
+!gui.
 
-+!test_gui
++!gui
     <-  makeArtifact("gui","artifacts.Pedidos_de_entrega",[],Id);
         focus(Id);
         .print("Interface gráfica criada e pronta para receber pedidos").
@@ -115,3 +115,35 @@ last_order_id(0).
         +pedido(ID, entregue, Drone, XP, YP, XD, YD);
         
         .print("Coordenador: Pedido #", ID, " foi entregue com sucesso. Estado atualizado para [entregue].").
+
+
+        // --- NOVO PLANO PARA VISUALIZAÇÃO DE PEDIDOS ---
+
+// PASSO 1: Este plano é ativado quando o utilizador clica no botão "Ver Pedidos".
++ver_pedidos
+    <-  .print("Coordenador: A pedido do utilizador, a gerar relatório de pedidos...");
+        // PASSO 2: Recolhe todos os pedidos da "base de dados".
+        .findall(pedido(I,S,D,OX,OY,DX,DY), pedido(I,S,D,OX,OY,DX,DY), ListaDePedidos);
+        // PASSO 3: Inicia o processo de formatação da lista para uma String.
+        !formatar_lista_para_string(ListaDePedidos, "Histórico de Pedidos:\n--------------------------\n\n", RelatorioFinal);
+        // PASSO 4: Envia a String final para a interface gráfica.
+        mostrar_lista_pedidos(RelatorioFinal)[artifact_id(Id)].
+
+// Planos ajudantes para formatar a lista recursivamente.
+
+// Plano recursivo: processa o primeiro pedido da lista e chama-se a si mesmo para o resto.
++!formatar_lista_para_string([pedido(I,S,D,_,_,_,_) | T], StringAtual, RelatorioFinal)
+    <-  // Concatena a informação do pedido atual à String.
+        .concat(StringAtual, 
+                "Pedido #: ", I, 
+                "\n  Estado: ", S,
+                "\n  Drone: ", D, "\n\n", 
+                ProximaString);
+        // Continua o processo com o resto da lista.
+        !formatar_lista_para_string(T, ProximaString, RelatorioFinal).
+
+// Caso base: a lista está vazia, a formatação terminou.
++!formatar_lista_para_string([], StringFinal, RelatorioFinal)
+    <-  // Unifica a variável de resultado com a String que construímos.
+        RelatorioFinal = StringFinal.
+
