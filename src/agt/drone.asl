@@ -51,3 +51,19 @@ pacote(n).
         .print("Distância voada: ", Distancia, ". Bateria gasta: ", BateriaGasta);
         .print("Bateria anterior: ", B, ". Bateria atual: ", NovaBateria);
         -+bateria(NovaBateria).
+
+
+// Caso 1: Bateria está a carregar (e abaixo de 91%)
++localizacao(0, 0) : ocupado(n) & bateria(B) & B < 91 & .my_name(Nome)
+    <-  .print(Nome, ": Na base de recarga...");
+        .wait(2000); // Espera 2 segundos
+        .print(Nome, ": A recarregar... ", B, "% -> ", B + 10, "%");
+        -+bateria(B + 10);
+        -+localizacao(0,0). // Aciona este ciclo novamente
+
+// Caso 2: Bateria está quase cheia, carrega até 100%
++localizacao(0, 0) : ocupado(n) & bateria(B) & B >= 91 & B < 100 & .my_name(Nome)
+    <-  .print(Nome, ": Na base de recarga...");
+        .wait(2000); // Espera 2 segundos
+        .print(Nome, ": A recarregar... ", B, "% -> 100%");
+        -+bateria(100).

@@ -18,6 +18,8 @@ last_order_id(0).
         +pedido(ID, pendente, nao_atribuido, XP, YP, XD, YD);
         -last_order_id(N);
         +last_order_id(ID); 
+        .abolish(localizacao(_,_,_,_,_));
+        .print("Coordenador: A limpar dados de localização antigos...");
         !buscar_drones;
         .wait(2000); 
         !decidir_drone.
@@ -61,6 +63,7 @@ last_order_id(0).
 +!avaliar_candidato(Drone, Bateria, BateriaNecessaria, _, T, XP, YP, MelhorAteAgora, MinDistQuadrada)
     :   Bateria <= BateriaNecessaria
     <-  .print("    Resultado: Bateria insuficiente. A ignorar.");
+        .send(Drone,achieve, voar_para(0, 0));
         !encontrar_melhor_drone(T, XP, YP, MelhorAteAgora, MinDistQuadrada).
 
 // Ajudante CASO C: Tem bateria, mas não é o mais próximo.
