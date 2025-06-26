@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 
 import cartago.INTERNAL_OPERATION;
 import cartago.OPERATION;
-import cartago.OpFeedbackParam;
 import cartago.tools.GUIArtifact;
 
 public class Pedidos_de_entrega extends GUIArtifact {
